@@ -1,0 +1,65 @@
+package Testcases;
+
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.annotations.Test;
+
+public class componentTest 
+{
+	@Test
+	public void compTest()
+	{
+		//Set property
+		System.setProperty("webdriver.chrome.driver","D:\\software\\Selenium\\chromedriver.exe");
+		System.setProperty("webdriver.gecko.driver","D:\\software\\Selenium\\geckodriver.exe");
+		
+		//Launch browser 
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.manage().deleteAllCookies();
+		driver.manage().timeouts().pageLoadTimeout(40, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		
+		//GOTO site
+		try
+		{
+			//CHECKBOX automation
+			driver.get("https://www.seleniumeasy.com/test/basic-checkbox-demo.html");
+			Thread.sleep(3000);
+			WebElement check = driver.findElement(By.xpath("//*[@id=\"isAgeSelected\"]"));
+			if(!check.isSelected())
+			{
+				check.click();
+				Thread.sleep(2000);
+			}
+			if(check.isSelected())
+			{
+				check.click();
+				Thread.sleep(2000);
+			}
+			
+			List <WebElement> Allboxes = driver.findElements(By.xpath("//input[@type='checkbox']"));
+			int size = Allboxes.size();
+			for(int i=0;i<size;i++)
+			{
+				Allboxes.get(i).click();
+			}
+			
+			driver.findElement(By.xpath("//*[@id=\"check1\"]")).click();
+			Thread.sleep(1000);
+			driver.findElement(By.xpath("//*[@id=\"check1\"]")).click();
+		}
+		catch(Exception e) {System.out.print(e);}
+		
+		try
+		{
+			driver.get("https://www.seleniumeasy.com/test/basic-checkbox-demo.html");
+			Thread.sleep(3000);
+		}
+	}
+}

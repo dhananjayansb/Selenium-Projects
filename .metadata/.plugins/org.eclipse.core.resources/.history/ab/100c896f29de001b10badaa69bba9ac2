@@ -1,0 +1,32 @@
+package Testcases;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class GitTest {
+	public static void main(String[] args)
+	{
+		//Set property for chrome driver
+		System.setProperty("webdriver.chrome.driver", "D:\\software\\Selenium\\chromedriver.exe");
+		
+		//Launch browser
+		WebDriver driver = new ChromeDriver();
+		
+		//Goto site
+		try 
+		{
+		driver.get("https://www.github.com");
+		driver.manage().window().maximize();
+		Thread.sleep(5000);
+		driver.findElement(By.xpath("/html/body/div[1]/header/div/div[2]/div[2]/div[2]/a")).click();	
+		driver.findElement(By.id("login_field")).sendKeys("dhananjayansb");
+		driver.findElement(By.id("password")).clear();
+		driver.findElement(By.id("password")).sendKeys("Forevadj@26");
+		driver.findElement(By.name("commit")).click();
+		}
+		catch(Exception e) {};
+		System.out.println("Successfully Task completed");
+		driver.quit();
+	}
+}
