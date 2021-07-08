@@ -19,17 +19,15 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.ITestResult;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
 public class formTest 
 {
+	private static final formTest CaptureScreenshots = null;
 	static WebDriver driver;
-	public static void report(String fileName,String extension) throws IOException
-	{
-		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-		String timestamp = new SimpleDateFormat("dd-MMM-yy  hh.mm aa").format(new Date());
-		FileUtils.copyFile(scrFile, new File("E:/zoho/Incubation/Reports/Task2" + fileName+" "+timestamp+extension));
-	}
+	
 	public static void enter(String element,String data) throws IOException
 	{
 		WebElement name = driver.findElement(By.xpath(element));
@@ -38,6 +36,7 @@ public class formTest
 		name.click();
 		name.sendKeys(data);
 	}
+	
 	public static void dropdown(String element) throws IOException, InterruptedException
 	{
 		WebDriverWait wait = new WebDriverWait(driver, 30);
@@ -45,6 +44,7 @@ public class formTest
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(text(),'ABR')]")));
 		driver.findElement(By.xpath("//span[contains(text(),'ABR')]")).click();
 	}
+	
 	public static void frame(String frame) throws IOException, InterruptedException
 	{
 		driver.findElement(By.xpath(frame)).click();
@@ -53,6 +53,14 @@ public class formTest
 		driver.switchTo().defaultContent();
 		driver.findElement(By.xpath("//input[@id='popupButtonVal']")).click();
 	}
+	
+	public static void report(String fileName,String extension) throws IOException
+	{
+		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		String timestamp = new SimpleDateFormat("dd-MMM-yy  hh.mm aa").format(new Date());
+		FileUtils.copyFile(scrFile, new File("./ScreenShot/test1/" + fileName + " "+ timestamp+extension));
+	}
+	
 	@Test
 	public void formFillTest() throws IOException, InterruptedException
 	{

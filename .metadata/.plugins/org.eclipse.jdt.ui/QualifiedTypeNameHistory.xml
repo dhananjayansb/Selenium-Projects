@@ -25,4 +25,6 @@
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="java.lang.Thread"/>
     <fullyQualifiedTypeName name="org.openqa.selenium.Keys"/>
+    <fullyQualifiedTypeName name="org.testng.ITestResult"/>
+    <fullyQualifiedTypeName name="org.testng.annotations.AfterMethod"/>
 </qualifiedTypeNameHistroy>
