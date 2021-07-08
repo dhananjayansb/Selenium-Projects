@@ -2,16 +2,16 @@
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2021-07-06T22:39:28 IST" name="Default suite" finished-at="2021-07-06T22:40:58 IST" duration-ms="90581">
+  <suite started-at="2021-07-08T02:04:07 IST" name="Default suite" finished-at="2021-07-08T02:04:55 IST" duration-ms="48473">
     <groups>
     </groups>
-    <test started-at="2021-07-06T22:39:28 IST" name="Default test" finished-at="2021-07-06T22:40:58 IST" duration-ms="90581">
-      <class name="Testcases.componentTest">
-        <test-method signature="compTest()[pri:0, instance:Testcases.componentTest@59af0466]" started-at="2021-07-06T22:39:28 IST" name="compTest" finished-at="2021-07-06T22:40:58 IST" duration-ms="90536" status="PASS">
+    <test started-at="2021-07-08T02:04:07 IST" name="Default test" finished-at="2021-07-08T02:04:55 IST" duration-ms="48473">
+      <class name="Testcases.formTest">
+        <test-method signature="formFillTest()[pri:0, instance:Testcases.formTest@2accdbb5]" started-at="2021-07-08T02:04:07 IST" name="formFillTest" finished-at="2021-07-08T02:04:55 IST" duration-ms="48430" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- compTest -->
-      </class> <!-- Testcases.componentTest -->
+        </test-method> <!-- formFillTest -->
+      </class> <!-- Testcases.formTest -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

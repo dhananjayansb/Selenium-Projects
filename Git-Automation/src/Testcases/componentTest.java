@@ -1,16 +1,14 @@
 package Testcases;
 
-import static org.testng.Assert.assertEquals;
-
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -20,15 +18,23 @@ import org.testng.annotations.Test;
 
 public class componentTest 
 {
+	static WebDriver driver;
+    
+	public static void report(String fileName,String extension) throws IOException
+	{
+		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		String timestamp = new SimpleDateFormat("dd-MMM-yy  hh.mm aa").format(new Date());
+		FileUtils.copyFile(scrFile, new File("E:/zoho/Incubation/Reports/" + fileName+" "+timestamp+extension));
+	}
 	@Test
-	public void compTest() throws InterruptedException
+	public void compTest() throws InterruptedException, IOException
 	{
 		//Set property
 		System.setProperty("webdriver.chrome.driver","D:\\software\\Selenium\\chromedriver.exe");
 		System.setProperty("webdriver.gecko.driver","D:\\software\\Selenium\\geckodriver.exe");
 		
 		//Launch browser 
-		WebDriver driver = new ChromeDriver();
+		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
 		driver.manage().timeouts().pageLoadTimeout(40, TimeUnit.SECONDS);
@@ -36,21 +42,23 @@ public class componentTest
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		System.out.println("*********** Successfully Browser Launched ***********");
+		
 		//File Browse
 				driver.get("http://the-internet.herokuapp.com/upload");
 				String filepath = "E:\\zoho\\Incubation\\welcome.png";
-				WebElement uploadbutton = driver.findElement(By.xpath("//*[@id=\"file-upload\"]"));
+				WebElement uploadbutton = driver.findElement(By.xpath("//*[@id='file-upload']"));
 				uploadbutton.sendKeys(filepath);
-				WebElement upload = driver.findElement(By.id("file-submit"));
+				WebElement upload = driver.findElement(By.xpath("//*[@id='file-submit']"));
 				upload.click();
+				report("file-browse",".png");
 				System.out.println("*********** Successfully File Uploaded test ***********");
-				
+			
 		//CHECKBOX automation
 		try
 		{
 			driver.get("https://www.seleniumeasy.com/test/basic-checkbox-demo.html");
 			Thread.sleep(3000);
-			WebElement check = driver.findElement(By.xpath("//*[@id=\"isAgeSelected\"]"));
+			WebElement check = driver.findElement(By.xpath("//*[@id='isAgeSelected']"));
 			if(!check.isSelected())
 			{
 				check.click();
@@ -61,19 +69,7 @@ public class componentTest
 				check.click();
 				Thread.sleep(2000);
 			}
-			
-			//Group check-box
-			List <WebElement> Allboxes = driver.findElements(By.xpath("//input[@type='checkbox']"));
-			int size = Allboxes.size();
-			for(int i=0;i<size;i++)
-			{
-				Allboxes.get(i).click();
-			}
-			//JavaScript to scroll down
-			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-			driver.findElement(By.xpath("//*[@id=\"check1\"]")).click();
-			Thread.sleep(1000);
-			driver.findElement(By.xpath("//*[@id=\"check1\"]")).click();
+			report("check-box",".png");
 		}
 		catch(Exception e) {System.out.print(e);}
 		System.out.println("*********** Successfully Completed Checkbox test ***********");
@@ -83,26 +79,16 @@ public class componentTest
 		{
 			driver.get("https://www.seleniumeasy.com/test/basic-radiobutton-demo.html");
 			Thread.sleep(3000);
-			WebElement radiomale = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[1]/div[2]/label[1]/input"));
+			WebElement radiomale = driver.findElement(By.xpath("//*[text()='Male']"));
 			radiomale.click();
 			WebElement rcheck = driver.findElement(By.id("buttoncheck"));
 			rcheck.click();
 			Thread.sleep(2000);
-			WebElement radiofemale = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[1]/div[2]/label[2]/input"));
+			WebElement radiofemale = driver.findElement(By.xpath("//*[text()='Female']"));
 			radiofemale.click();
 			rcheck.click();
 			Thread.sleep(2000);
-			
-			//Group radio button
-			WebElement rsex = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/div[1]/label[1]/input"));
-			rsex.click();
-			WebElement rage = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/div[2]/label[1]/input"));
-			rage.click();
-			WebElement rcheckgroup = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[2]/div[2]/button"));
-			//JavaScript to scroll down
-			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
-			
-			rcheckgroup.click();	
+			report("radio-button",".png");
 		}
 		catch(Exception e) {System.out.print(e);}
 		System.out.println("*********** Successfully Completed Radiobutton test ***********");
@@ -114,6 +100,7 @@ public class componentTest
 			Thread.sleep(2000);
 			Select selectdrop = new Select(driver.findElement(By.id("select-demo")));
 			selectdrop.selectByIndex(4);
+			report("dropdown-seelct",".png");
 		}
 		catch(Exception e) {System.out.print(e);}
 		System.out.println("*********** Successfully Completed Dropdown test ***********");
@@ -159,6 +146,7 @@ public class componentTest
 			js.executeScript("window.scrollTo(0, document.body.scrollHeight)");
 			WebElement button = driver.findElement(By.id("submit"));
 			button.click();
+			report("keyboard-action",".png");
 		}
 		catch(Exception e) {System.out.print(e);}
 		System.out.println("*********** Successfully Completed Keyboard actions & Textbox test ***********");
@@ -166,14 +154,16 @@ public class componentTest
 		//ALERT
 		try 
 		{
-			driver.get("https://www.seleniumeasy.com/test/javascript-alert-box-demo.html");
-			WebElement alertbutton = driver.findElement(By.xpath("//*[@id=\"easycont\"]/div/div[2]/div[1]/div[2]/button"));
+			driver.get("http://leafground.com/pages/Alert.html");
+			Thread.sleep(2000);
+			WebElement alertbutton = driver.findElement(By.xpath("//button[contains(text(),'Alert Box')]"));
 			alertbutton.click();
 			Alert alert = driver.switchTo().alert();
 			String alertMsg = driver.switchTo().alert().getText();
 			System.out.println(alertMsg);
 			Thread.sleep(2000);
 			alert.accept();
+			report("alert-msg",".png");
 		}
 		catch(Exception e) {System.out.print(e);}
 		System.out.println("*********** Successfully Completed Alert test ***********");
@@ -185,6 +175,7 @@ public class componentTest
 			driver.switchTo().frame(0);
 			String nse = driver.findElement(By.id("nseindex")).getText();
 			System.out.println(nse);
+			report("iframe",".png");
 		}
 		catch(Exception e) {System.out.print(e);}
 		System.out.println("*********** Successfully Completed iFrame test ***********");
@@ -194,19 +185,19 @@ public class componentTest
 		{
 			driver.get("https://www.github.com");
 			Thread.sleep(3000);
-			driver.findElement(By.xpath("/html/body/div[1]/header/div/div[2]/div[2]/div[2]/a")).click();	
-			driver.findElement(By.id("login_field")).sendKeys("username");
+			driver.findElement(By.xpath("//a[@href='/login']")).click();	
+			driver.findElement(By.id("login_field")).sendKeys("text123@gmail.com");
 			Thread.sleep(1000);
 			driver.findElement(By.id("password")).clear();
 			driver.findElement(By.id("password")).sendKeys("password");
 			Thread.sleep(1000);
 			driver.findElement(By.name("commit")).click();
 			Thread.sleep(3000);
-			
+			report("login-test",".png");
 			//UI data comparison
 			driver.get("https://www.github.com/dhananjayansb");
 			Thread.sleep(3000);
-			String actualName = driver.findElement(By.xpath("//*[@id=\"js-pjax-container\"]/div[2]/div/div[1]/div/div[2]/div[2]/h1/span[1]")).getText();
+			String actualName = driver.findElement(By.xpath("//span[contains(text(),'Dhananjayan SB')]")).getText();
 			String expectedName = "Dhananjayan SB";
 			if(actualName.equals(expectedName))
 			{
@@ -215,5 +206,6 @@ public class componentTest
 		}
 		catch(Exception e) {System.out.print(e);}
 		System.out.println("*********** Successfully Completed Login & UI comparison test ***********");
+		
 	}
 }
