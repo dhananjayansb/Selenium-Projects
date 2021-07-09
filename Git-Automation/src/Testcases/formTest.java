@@ -58,7 +58,7 @@ public class formTest
 	{
 		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
 		String timestamp = new SimpleDateFormat("dd-MMM-yy  hh.mm aa").format(new Date());
-		FileUtils.copyFile(scrFile, new File("./ScreenShot/test1/" + fileName + " "+ timestamp+extension));
+		FileUtils.copyFile(scrFile, new File("./ScreenShot/test2/" + fileName + " "+ timestamp+extension));
 	}
 	
 	@Test

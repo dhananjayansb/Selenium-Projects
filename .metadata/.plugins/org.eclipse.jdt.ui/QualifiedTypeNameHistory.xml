@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="org.openqa.selenium.chrome.ChromeDriver"/>
     <fullyQualifiedTypeName name="org.openqa.selenium.support.ui.Select"/>
     <fullyQualifiedTypeName name="org.openqa.selenium.JavascriptExecutor"/>
     <fullyQualifiedTypeName name="org.openqa.selenium.interactions.Action"/>
@@ -11,20 +10,43 @@
     <fullyQualifiedTypeName name="java.util.Date"/>
     <fullyQualifiedTypeName name="org.openqa.selenium.io.FileHandler"/>
     <fullyQualifiedTypeName name="org.apache.commons.io.FileUtils"/>
-    <fullyQualifiedTypeName name="org.openqa.selenium.WebDriver"/>
     <fullyQualifiedTypeName name="org.openqa.selenium.edge.EdgeDriver"/>
     <fullyQualifiedTypeName name="org.openqa.selenium.firefox.FirefoxDriver"/>
     <fullyQualifiedTypeName name="org.openqa.selenium.By"/>
     <fullyQualifiedTypeName name="org.openqa.selenium.WebElement"/>
-    <fullyQualifiedTypeName name="org.testng.annotations.Test"/>
     <fullyQualifiedTypeName name="org.openqa.selenium.support.ui.WebDriverWait"/>
     <fullyQualifiedTypeName name="org.openqa.selenium.support.ui.ExpectedConditions"/>
     <fullyQualifiedTypeName name="java.util.concurrent.TimeUnit"/>
     <fullyQualifiedTypeName name="jdk.jfr.Timespan"/>
     <fullyQualifiedTypeName name="org.openqa.selenium.interactions.Actions"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="java.lang.Thread"/>
     <fullyQualifiedTypeName name="org.openqa.selenium.Keys"/>
     <fullyQualifiedTypeName name="org.testng.ITestResult"/>
     <fullyQualifiedTypeName name="org.testng.annotations.AfterMethod"/>
+    <fullyQualifiedTypeName name="org.openqa.selenium.chrome.ChromeDriver"/>
+    <fullyQualifiedTypeName name="org.testng.annotations.Test"/>
+    <fullyQualifiedTypeName name="org.testng.annotations.DataProvider"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="java.math.BigDecimal"/>
+    <fullyQualifiedTypeName name="org.apache.poi.hssf.usermodel.HSSFWorkbook"/>
+    <fullyQualifiedTypeName name="java.io.FileInputStream"/>
+    <fullyQualifiedTypeName name="java.io.FileOutputStream"/>
+    <fullyQualifiedTypeName name="org.apache.poi.ss.usermodel.Workbook"/>
+    <fullyQualifiedTypeName name="org.apache.poi.ss.usermodel.WorkbookFactory"/>
+    <fullyQualifiedTypeName name="java.io.File"/>
+    <fullyQualifiedTypeName name="org.apache.poi.xssf.usermodel.XSSFSheet"/>
+    <fullyQualifiedTypeName name="org.apache.poi.xssf.usermodel.XSSFWorkbook"/>
+    <fullyQualifiedTypeName name="java.util.Iterator"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="java.io.IOException"/>
+    <fullyQualifiedTypeName name="org.openqa.selenium.WebDriver"/>
+    <fullyQualifiedTypeName name="org.apache.poi.xssf.usermodel.XSSFCell"/>
+    <fullyQualifiedTypeName name="com.google.common.collect.Table.Cell"/>
+    <fullyQualifiedTypeName name="org.apache.poi.ss.usermodel.Cell"/>
+    <fullyQualifiedTypeName name="org.apache.poi.ss.usermodel.Row"/>
+    <fullyQualifiedTypeName name="org.apache.poi.xssf.usermodel.XSSFRow"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="java.util.Map.Entry"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
 </qualifiedTypeNameHistroy>
