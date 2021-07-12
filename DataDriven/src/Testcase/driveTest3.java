@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -22,9 +21,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
 
  
-public class driveTest2 
+public class driveTest3 
 {
 	static WebDriver driver;
 	public static File file;
@@ -77,7 +77,8 @@ public class driveTest2
 		catch(Exception e) {e.printStackTrace();}
 	}
 	
-	public static void main(String[] args) throws IOException
+	@Test
+	public void test3() throws IOException
 	{
 		System.setProperty("webdriver.chrome.driver","D:\\software\\Selenium\\chromedriver.exe");
 		driver = new ChromeDriver();
