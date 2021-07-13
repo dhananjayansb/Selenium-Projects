@@ -2,13 +2,14 @@ package Testcase;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -21,9 +22,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.Test;
 
- 
+
 public class driveTest3 
 {
 	static WebDriver driver;
@@ -34,52 +34,11 @@ public class driveTest3
 	public static XSSFRow cellr;
 	public static XSSFCell cellc;
 	static int rowsize,colsize,row,col;
-	
-	public static void enter(String element,String data) throws IOException
+
+	public static void main(String[] args) throws IOException
 	{
-		WebDriverWait wait = new WebDriverWait(driver, 30);
-		try 
-		{
-			WebElement name = driver.findElement(By.xpath(element));
-			name.click();
-			name.clear();
-			wait.until(ExpectedConditions.elementToBeClickable(By.xpath(element))).clear();
-			name.click();
-			name.sendKeys(data);
-		}
-		catch(Exception e) {e.printStackTrace();}
-	}
-	
-	public static void dropdown(String element,String data) throws IOException, InterruptedException
-	{
-		WebDriverWait wait = new WebDriverWait(driver, 60);
-		try
-		{
-			driver.findElement(By.xpath(element)).click();
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[@orgval='"+data+"']")));
-			driver.findElement(By.xpath("//label[@orgval='"+data+"']")).click();
-		}
-		catch(Exception e) {e.printStackTrace();}
-	}
-	
-	public static void frame(String frame,String data) throws IOException, InterruptedException
-	{
-		WebDriverWait wait = new WebDriverWait(driver, 30);
-		try
-		{
-			driver.findElement(By.xpath(frame)).click();
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='modal-header']/following-sibling::div[1]")));
-			driver.switchTo().frame("adObjects");
-			driver.findElement(By.xpath("//li[@id='OU="+data+",DC=admanagerplus,DC=com']//a[1]")).click();
-			driver.switchTo().defaultContent();
-			driver.findElement(By.xpath("//input[@id='popupButtonVal']")).click();
-		}
-		catch(Exception e) {e.printStackTrace();}
-	}
-	
-	@Test
-	public void test3() throws IOException
-	{
+		Logger logger = Logger.getLogger("driveTest3");
+		PropertyConfigurator.configure("Log4j.properties");
 		System.setProperty("webdriver.chrome.driver","D:\\software\\Selenium\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
@@ -90,23 +49,30 @@ public class driveTest3
 		//Explicit-wait
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		Actions action = new Actions(driver);
+		elementLocators ELPage = new elementLocators(driver);
+		logger.info("Browser opened and maximized");
 		
+		long startTime = System.currentTimeMillis();
 		driver.get("https://demo.admanagerplus.com/");
+		logger.info("URL opened");
 		
 		//Administrator-button
 		driver.findElement(By.partialLinkText("Administrat")).click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[@id='TABS_AREA']")));
-				
+		logger.info("Logged in Adminstrator");	
+		
 		//Management-button
 		WebElement topMenu = driver.findElement(By.id("top-menu"));
 		action.moveToElement(topMenu).moveToElement(driver.findElement(By.xpath("//a[contains(text(),'Management')]"))).click().build().perform();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[contains(text(),'Create Single User')]")));
-				
+		logger.info("Logged in Management");
+		
 		//Create-User-button
 		action.moveToElement(topMenu).moveToElement(driver.findElement(By.xpath("//span[contains(text(),'Create Single User')]"))).click().build().perform();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@name='save']")));
-
-		file = new File("D:\\git\\Selenium-Projects\\DataDriven\\Data2.xlsx");
+		logger.info("Logged in Create User");
+		
+		file = new File("D:\\git\\Selenium-Projects\\DataDriven\\Data3.xlsx");
 		fis = new FileInputStream(file);
 		workbook = new XSSFWorkbook(fis);
 		sheet = workbook.getSheet("Sheet1");
@@ -147,83 +113,92 @@ public class driveTest3
 			
 			List<String> headlist = new ArrayList<String>(data.keySet());
 			List<String> valuelist = new ArrayList<String>(data.values());
-			for(int i = 0; i < valuelist.size(); i++) {
-	            System.out.println(valuelist.get(i));
-	        }
-			
+			logger.info("Read and Stored Excel data");
 			for(int i = 0; i < headlist.size(); i++) 
 			{
 	            String check = headlist.get(i);
-	            if(check.equals("Name"))
+	            if(check.equals("First Name"))
 	            {
-	            	enter("(//span[text()='First name']/following::input)[1]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setFirstName(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered Name");
 	            }
-	            else if(check.equals("Initial"))
+	            else if(check.equals("Initials"))
 	            {
-	            	enter("(//span[text()='Initials']/following::input)[1]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setInital(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered Initial");
 	            }
-	            else if(check.equals("LastName"))
+	            else if(check.equals("Last Name"))
 	            {
-	            	enter("(//span[text()='Last name']/following::input)[1]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setLastName(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered LastName");
 	            }
-	            else if(check.equals("Logonname"))
+	            else if(check.equals("Logon Name"))
 	            {
-	            	enter("(//span[text()='Logon Name']/following::input)[1]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setLogonName(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered LogonName");
 	            }
-	            else if(check.equals("Prewindows"))
+	            else if(check.equals("SAM Account Name"))
 	            {
-	            	enter("(//li[@class='field-input-li']//input)[2]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setPrewindows(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered Prewindows");
 	            }
-	            else if(check.equals("Fullname"))
+	            else if(check.equals("Full Name"))
 	            {
-	            	enter("(//span[text()='Full name']/following::input)[1]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setFullName(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered FullName");
 	            }
-	            else if(check.equals("Displayname"))
+	            else if(check.equals("Display Name"))
 	            {
-	            	enter("(//span[text()='Display name']/following::input)[1]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setDisplayName(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered DisplayName");
 	            }
-	            else if(check.equals("Employeeid"))
+	            else if(check.equals("Employee ID"))
 	            {
-	            	enter("(//span[text()='Employee ID']/following::input)[1]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setEmployeeId(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered EmployeeId");
 	            }
 	            else if(check.equals("Description"))
 	            {
-	            	enter("(//span[text()='Description']/following::input)[1]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setDescription(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered Description");
 	            }
 	            else if(check.equals("Office"))
 	            {
-	            	dropdown("(//div[@title='-- Select/specify a value --'])[2]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setOffice(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered Office");
 	            }
-	            else if(check.equals("Phone"))
+	            else if(check.equals("Telephone Number"))
 	            {
-	            	enter("(//span[text()='Telephone number']/following::input)[1]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setPhone(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered Phone");
 	            }
-	            else if(check.equals("Email"))
+	            else if(check.equals("Email Address"))
 	            {
-	            	enter("(//span[text()='E-mail']/following::input)[1]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setEmail(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered Email");
 	            }
 	            else if(check.equals("Webpage"))
 	            {
-	            	enter("(//span[text()='Web page']/following::input)[1]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setWebpage(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered Web Page");
 	            }
-	            else if(check.equals("Container"))
+	            else if(check.equals("Container Name"))
 	            {
-	            	frame("(//div[@class='input-group pull-left']//span)[1]",String.valueOf(valuelist.get(i)));
+	            	ELPage.setContainer(String.valueOf(valuelist.get(i)));
+	            	logger.info("Entered Container value");
 	            } 
  
 	        }
-			for(row=1;row<rowsize;row++)
-			{
-				sheet.getRow(row).createCell(14).setCellValue("Success");
-				FileOutputStream fos = new FileOutputStream(file);
-				workbook.write(fos);
-			}
+			
 			driver.findElement(By.name("save")).sendKeys(Keys.PAGE_DOWN);
 			driver.findElement(By.name("save")).click();
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//div[@class='modal-dialog modal-size-12']//div)[1]")));
-			driver.findElement(By.xpath("(//button[text()='OK'])[2]")).click();
-			System.out.print("complete");
+			String result = driver.findElement(By.xpath("//span[text()[normalize-space()='Error in creating user, The server is unwilling to process the request.']]")).getText();
+			logger.error(result);
+			System.out.println("complete");
 		}
 		catch(Exception e) {e.printStackTrace();}
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		System.out.println("Total Page Load Time: " + totalTime + "milliseconds");
 	}
 }

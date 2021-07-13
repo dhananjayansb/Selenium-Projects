@@ -90,6 +90,7 @@ public class driveTest2
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		Actions action = new Actions(driver);
 		
+		long startTime = System.currentTimeMillis();
 		driver.get("https://demo.admanagerplus.com/");
 		
 		//Administrator-button
@@ -146,10 +147,7 @@ public class driveTest2
 			
 			List<String> headlist = new ArrayList<String>(data.keySet());
 			List<String> valuelist = new ArrayList<String>(data.values());
-			for(int i = 0; i < valuelist.size(); i++) {
-	            System.out.println(valuelist.get(i));
-	        }
-			
+
 			for(int i = 0; i < headlist.size(); i++) 
 			{
 	            String check = headlist.get(i);
@@ -211,18 +209,21 @@ public class driveTest2
 	            } 
  
 	        }
+			
+			driver.findElement(By.name("save")).sendKeys(Keys.PAGE_DOWN);
+			driver.findElement(By.name("save")).click();
+			String result = driver.findElement(By.xpath("//span[text()[normalize-space()='Error in creating user, The server is unwilling to process the request.']]")).getText();
 			for(row=1;row<rowsize;row++)
 			{
-				sheet.getRow(row).createCell(14).setCellValue("Success");
+				sheet.getRow(row).createCell(14).setCellValue(result);
 				FileOutputStream fos = new FileOutputStream(file);
 				workbook.write(fos);
 			}
-			driver.findElement(By.name("save")).sendKeys(Keys.PAGE_DOWN);
-			driver.findElement(By.name("save")).click();
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//div[@class='modal-dialog modal-size-12']//div)[1]")));
-			driver.findElement(By.xpath("(//button[text()='OK'])[2]")).click();
-			System.out.print("complete");
+			System.out.println("complete");
 		}
 		catch(Exception e) {e.printStackTrace();}
+		long endTime = System.currentTimeMillis();
+		long totalTime = endTime - startTime;
+		System.out.println("Total Page Load Time: " + totalTime + "milliseconds");
 	}
 }
