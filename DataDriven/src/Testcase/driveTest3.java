@@ -39,7 +39,7 @@ public class driveTest3
 	{
 		Logger logger = Logger.getLogger("driveTest3");
 		PropertyConfigurator.configure("Log4j.properties");
-		System.setProperty("webdriver.chrome.driver","D:\\software\\Selenium\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver","D:\\software\\Selenium\\Drivers\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
@@ -52,7 +52,7 @@ public class driveTest3
 		elementLocators ELPage = new elementLocators(driver);
 		logger.info("Browser opened and maximized");
 		
-		long startTime = System.currentTimeMillis();
+		
 		driver.get("https://demo.admanagerplus.com/");
 		logger.info("URL opened");
 		
@@ -80,6 +80,7 @@ public class driveTest3
 		int rowsize = sheet.getPhysicalNumberOfRows();
 		int colsize = sheet.getRow(0).getLastCellNum();
 		int row,col;
+		long startTime = 0;
 		HashMap<String, String> data = new HashMap<String,String>();
 		try
 		{
@@ -114,6 +115,10 @@ public class driveTest3
 			List<String> headlist = new ArrayList<String>(data.keySet());
 			List<String> valuelist = new ArrayList<String>(data.values());
 			logger.info("Read and Stored Excel data");
+			
+			//start-time-user
+			startTime = System.currentTimeMillis();
+			
 			for(int i = 0; i < headlist.size(); i++) 
 			{
 	            String check = headlist.get(i);
@@ -192,11 +197,12 @@ public class driveTest3
 			
 			driver.findElement(By.name("save")).sendKeys(Keys.PAGE_DOWN);
 			driver.findElement(By.name("save")).click();
-			String result = driver.findElement(By.xpath("//span[text()[normalize-space()='Error in creating user, The server is unwilling to process the request.']]")).getText();
+			String result = driver.findElement(By.id("statusTable")).getText();
 			logger.error(result);
 			System.out.println("complete");
 		}
 		catch(Exception e) {e.printStackTrace();}
+		//end-time-user
 		long endTime = System.currentTimeMillis();
 		long totalTime = endTime - startTime;
 		System.out.println("Total Page Load Time: " + totalTime + "milliseconds");

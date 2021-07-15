@@ -3,7 +3,6 @@ package Testcase;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,9 +45,9 @@ public class driveTest4
 	
 	public static void main(String[] args) throws IOException, InterruptedException
 	{
-		Logger logger = Logger.getLogger("driveTest3");
+		Logger logger = Logger.getLogger("driveTest4");
 		PropertyConfigurator.configure("Log4j.properties");
-		System.setProperty("webdriver.chrome.driver","D:\\software\\Selenium\\chromedriver.exe");
+		System.setProperty("webdriver.chrome.driver","D:\\software\\Selenium\\Drivers\\chromedriver.exe");
 		driver = new ChromeDriver();
 		driver.manage().window().maximize();
 		driver.manage().deleteAllCookies();
@@ -83,7 +82,7 @@ public class driveTest4
 
 		//details-table
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#ResultData_auditReport")));
-		WebElement details = driver.findElement(By.xpath("//table[@id='ResultDataRows_auditReport']/tbody/tr[2]/td[9]/a[1]")); 
+		WebElement details = driver.findElement(By.xpath("(//div[@class='admp-wid-auto']//a)[1]")); 
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].scrollIntoView()", details);
 		js.executeScript("arguments[0].click()", details);
@@ -93,6 +92,13 @@ public class driveTest4
 		List<WebElement> allrows = table.findElements(By.xpath("//div[@dir='ltr']//table[1]//tbody//tr")); 
 		int size = allrows.size();
 		
+		//Object-name
+		String Objectname = driver.findElement(By.xpath("(//span[@class='admp-space-1']/following-sibling::span)[1]")).getText();
+		logger.info("Obejct Name : "+Objectname);
+		String Domainname = driver.findElement(By.xpath("(//span[@class='admp-space-1']/following-sibling::span)[2]")).getText();
+		logger.info("Domain Name : "+Domainname);
+		String Templatename = driver.findElement(By.xpath("(//span[@class='admp-space-1']/following-sibling::span)[3]")).getText();
+		logger.info("Template Name : "+Templatename);
 		
 		file = new File("D:\\git\\Selenium-Projects\\DataDriven\\Data3.xlsx");
 		fis = new FileInputStream(file);
