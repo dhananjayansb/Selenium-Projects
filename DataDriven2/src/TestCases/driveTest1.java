@@ -85,11 +85,8 @@ public class driveTest1
 			{
 				HashMap<String, String> mp = new HashMap<>();
 				List<String> row = new ArrayList<>();
-				
 				String[] rowArr = dataArray[d].split(",");
 				row.addAll(Arrays.asList(rowArr));
-			
-				String testId = row.get(0);
 				row.remove(0);
 				
 				//captures single row

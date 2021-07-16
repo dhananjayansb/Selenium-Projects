@@ -128,7 +128,7 @@ public class elementLocators
 		try
 		{
 			office2.click();
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//label[@orgval='"+data+"']")));
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='"+data+"']")));
 			driver.findElement(By.xpath("//label[@orgval='"+data+"']")).click();
 		}
 		catch(Exception e) {e.printStackTrace();}
