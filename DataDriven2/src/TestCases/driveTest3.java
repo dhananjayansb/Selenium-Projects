@@ -3,6 +3,8 @@ package TestCases;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -34,7 +36,6 @@ public class driveTest3
 {
 	static WebDriver driver;
 	static JavascriptExecutor js = (JavascriptExecutor) driver;
-	static String pdf = "D:\\git\\Selenium-Projects\\DataDriven2\\download\\";
 	static WebElement Loading;
 	public static void enter(String element,String data) throws IOException
 	{
@@ -63,9 +64,9 @@ public class driveTest3
 		catch(Exception e) {e.printStackTrace();}
 	}
 	
-	public static boolean isFileDownloaded(String filePath, String fileName) throws Exception {
+	public static boolean isFileDownloaded(String pdf, String fileName) throws Exception {
 	    final int SLEEP_TIME_MILLIS = 1000;
-	    File file = new File(filePath+"\\"+fileName);
+	    File file = new File(pdf+"\\"+fileName);
 	    final int timeout = 60* SLEEP_TIME_MILLIS;
 	    int timeElapsed = 0;
 	    while (timeElapsed<timeout){
@@ -104,6 +105,13 @@ public class driveTest3
 	}
 	public static void main(String[] args) throws Exception
 	{
+		Date now = new Date();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("hh mm ss");
+		String time = dateFormat.format(now);
+		String pdf = "D:\\git\\Selenium-Projects\\DataDriven2\\download\\"+time+"\\";
+		File file = new File(pdf);
+		file.mkdir();
+		
 		ChromeOptions options = new ChromeOptions();
 		Map<String, Object> prefs = new HashMap<String, Object>();
 		prefs.put("download.default_directory", pdf);
@@ -194,9 +202,9 @@ public class driveTest3
 	    Thread.sleep(5000);
 	    isFileDownloaded(pdf,"AuditReport.pdf"); 
 	    
-	    String path = ("D:\\git\\Selenium-Projects\\DataDriven2\\download\\AuditReport.pdf");
-	    File file = new File(path);
-		FileInputStream fis = new FileInputStream(file);
+	    String path = ("D:\\git\\Selenium-Projects\\DataDriven2\\download\\"+time+"\\AuditReport.pdf");
+	    File outputFile = new File(path);
+		FileInputStream fis = new FileInputStream(outputFile);
 		PDFParser parser = new PDFParser(fis);
 		parser.parse();
 
