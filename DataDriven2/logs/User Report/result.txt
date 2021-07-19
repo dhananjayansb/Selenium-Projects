@@ -1,0 +1,5 @@
+Adminstrator logged
+Report logged
+Swtiched to all user report
+Successfully updated the user properties.
+Time Taken - 0 hours 0 minutes 41 seconds.
