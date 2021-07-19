@@ -1,13 +1,23 @@
 package TestCases;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.Set;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -20,7 +30,22 @@ public class driveTest2
 	static WebDriver driver;
 	static WebDriverWait wait;
 		
-		public static boolean windowCheck(String check) throws InterruptedException
+	public static void report(String fileName,String extension) throws IOException
+	{
+		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		String timestamp = new SimpleDateFormat("dd-MMM-yy  hh.mm aa").format(new Date());
+		FileUtils.copyFile(scrFile, new File("./ScreenShot/userReport/" + fileName + " "+ timestamp+extension));
+	}
+	
+	public static void output(File file,String message) throws IOException
+	{
+		FileWriter output = new FileWriter(file,true);
+		BufferedWriter buffer = new BufferedWriter(output);
+		buffer.write(message+"\n");
+		buffer.close();
+	}
+	
+	public static boolean windowCheck(String check) throws InterruptedException
 		{
 			Set<String> windowHandles = driver.getWindowHandles();
 			List<String> windows = new ArrayList<String>(windowHandles); 
@@ -73,6 +98,11 @@ public class driveTest2
 		}
 		public static void main(String[] args) throws IOException, InterruptedException 
 		{
+			Instant start = Instant.now();
+			String filePath = "D:\\git\\Selenium-Projects\\DataDriven2\\logs\\URL";
+			String fileName = "result.txt";
+			File file = new File(filePath+"\\"+fileName);
+		
 			Logger logger = Logger.getLogger("driveTest3");
 			PropertyConfigurator.configure("Log4j.properties");
 			System.setProperty("webdriver.chrome.driver","D:\\software\\Selenium\\Drivers\\chromedriver.exe");
@@ -85,42 +115,48 @@ public class driveTest2
 			//Explicit-wait
 			wait = new WebDriverWait(driver, 30);
 			Actions action = new Actions(driver);
-			logger.info("Browser opened and maximized");
+			output(file,"Browser opened and maximized");
 			
 			//URL
 			driver.get("https://demo.admanagerplus.com/");
-			logger.info("URL opened");
+			output(file,"URL opened");
 			
 			//Administrator-button
 			driver.findElement(By.partialLinkText("Administrat")).click();
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[@id='TABS_AREA']")));
-			logger.info("Logged in Adminstrator");	
+			output(file,"Logged in Adminstrator");	
 			
 			//Support-button
 			WebElement topMenu = driver.findElement(By.id("top-menu"));
 			action.moveToElement(topMenu).moveToElement(driver.findElement(By.xpath("//a[contains(text(),'Support')]"))).click().build().perform();
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@id='OnlineStore']")));
-			logger.info("Logged in Support");
+			output(file,"Logged in Support");
 			
 			//Buy-now
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//span[text()='04'])[1]")));
 			WebElement buynow = driver.findElement(By.id("BuyNow"));
 			buynow.click();
 			String buy = buynow.getText();
-			logger.info("BuyNow : "+windowCheck(buy));
+			output(file,"BuyNow : "+windowCheck(buy));
 			
 			//Get-Quote
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//span[text()='04'])[1]")));
 			WebElement getquote = driver.findElement(By.id("GetQuote"));
 			getquote.click();
 			String quote = getquote.getText();
-			logger.info("GetQuote : "+ windowCheck(quote));
+			output(file,"GetQuote : "+ windowCheck(quote));
 			
 			//Pricing
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//span[text()='04'])[1]")));
 			WebElement pricing = driver.findElement(By.id("Pricing"));
 			pricing.click();
 			String price = pricing.getText();
-			logger.info("Pricing : "+ windowCheck(price));
+			output(file,"Pricing : "+ windowCheck(price));
+			
+			Instant end = Instant.now();
+			long hours = ChronoUnit.HOURS.between(start, end);
+	        long minutes = ChronoUnit.MINUTES.between(start, end) % 60;
+	        long seconds = ChronoUnit.SECONDS.between(start, end) % 60;
+	        output(file,"Time Taken - " + hours + " hours " + minutes+ " minutes " + seconds + " seconds.");
 		}
 }

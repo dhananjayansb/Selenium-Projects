@@ -1,7 +1,9 @@
 package TestCases;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,9 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.apache.commons.io.FileUtils;
 import org.apache.pdfbox.cos.COSDocument;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -20,6 +20,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -30,6 +32,8 @@ import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 
 public class driveTest3 
@@ -103,22 +107,42 @@ public class driveTest3
 				      wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector("div.loading")));
 				}
 	}
+	
+	public static void report(String fileName,String extension) throws IOException
+	{
+		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		String timestamp = new SimpleDateFormat("dd-MMM-yy  hh.mm aa").format(new Date());
+		FileUtils.copyFile(scrFile, new File("./ScreenShot/userReport/" + fileName + " "+ timestamp+extension));
+	}
+	
+	public static void output(File file,String message) throws IOException
+	{
+		FileWriter output = new FileWriter(file,true);
+		BufferedWriter buffer = new BufferedWriter(output);
+		buffer.write(message+"\n");
+		buffer.close();
+	}
+	
+	
 	public static void main(String[] args) throws Exception
 	{
+		Instant start = Instant.now();
+		String filePath = "D:\\git\\Selenium-Projects\\DataDriven2\\logs\\Sorting";
+		String fileName = "result.txt";
+		File file = new File(filePath+"\\"+fileName);
+		
 		Date now = new Date();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("hh mm ss");
 		String time = dateFormat.format(now);
 		String pdf = "D:\\git\\Selenium-Projects\\DataDriven2\\download\\"+time+"\\";
-		File file = new File(pdf);
-		file.mkdir();
+		File filenew = new File(pdf);
+		filenew.mkdir();
 		
 		ChromeOptions options = new ChromeOptions();
 		Map<String, Object> prefs = new HashMap<String, Object>();
 		prefs.put("download.default_directory", pdf);
 		options.setExperimentalOption("prefs", prefs);
 		
-		Logger logger = Logger.getLogger("driveTest4");
-		PropertyConfigurator.configure("Log4j.properties");
 		System.setProperty("webdriver.chrome.driver","D:\\software\\Selenium\\Drivers\\chromedriver.exe");
 		driver = new ChromeDriver(options);
 		driver.manage().window().maximize();
@@ -129,26 +153,30 @@ public class driveTest3
 		//Explicit-wait
 		WebDriverWait wait = new WebDriverWait(driver, 30);
 		Actions action = new Actions(driver);
-		logger.info("Browser opened and maximized");
+		output(file,"Browser opened and maximized");
 		
 		driver.get("https://demo.admanagerplus.com/");
-		logger.info("URL opened");
-
+		output(file,"URL opened");
+		report("webpage",".png");
+		
 		//Administrator-button
 		driver.findElement(By.partialLinkText("Administrat")).click();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[@id='TABS_AREA']")));
-		logger.info("Logged in Adminstrator");	
+		output(file,"Logged in Adminstrator");	
+		report("administrator",".png");
 		
 		//Delegation-button
 		WebElement topMenu = driver.findElement(By.id("top-menu"));
 		action.moveToElement(topMenu).moveToElement(driver.findElement(By.xpath("//a[contains(text(),'Delegation')]"))).click().build().perform();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//li[@id='module_7003']/a[1]")));
-		logger.info("Logged in Delegation");
+		output(file,"Logged in Delegation");
+		report("Delegation",".png");
 		
 		//Audit-Report-Button
 		action.moveToElement(topMenu).moveToElement(driver.findElement(By.xpath("//li[@id='module_7003']/a[1]"))).click().build().perform();
 		loading();
-		logger.info("Audit report opened");
+		output(file,"Audit report opened");
+		report("Audit report",".png");
 		
 		
 		//Sorting
@@ -168,7 +196,8 @@ public class driveTest3
 	    action.moveToElement(driver.findElement(By.cssSelector("i.admp-icon.icn-backward"))).click().perform();
 	    action.moveToElement(driver.findElement(By.xpath("(//button[text()='OK'])[1]"))).click().perform();
 	    loading();
-	    logger.info("Removed Attribute");
+	    output(file,"Removed Attribute");
+	    report("Removed attribute",".png");
 	    Thread.sleep(10000);
 	    
 	    //Add-Attribute
@@ -181,7 +210,8 @@ public class driveTest3
 	    action.moveToElement(driver.findElement(By.cssSelector("i.admp-icon.icn-forward"))).click().perform();
 	    action.moveToElement(driver.findElement(By.xpath("(//button[text()='OK'])[1]"))).click().perform();
 	    loading();
-	    logger.info("Added Attribute");
+	    output(file,"Added Attribute");
+	    report("Added Attribute",".png");
 	    
 	    //Search and export as PDF
 	    Thread.sleep(10000);
@@ -218,7 +248,13 @@ public class driveTest3
 		
 		if(data.contains("Dhananjayan"))
 		{
-			logger.info("DATA FOUND !!");
+			output(file,"DATA FOUND !!");
 		}
+		
+		Instant end = Instant.now();
+		long hours = ChronoUnit.HOURS.between(start, end);
+        long minutes = ChronoUnit.MINUTES.between(start, end) % 60;
+        long seconds = ChronoUnit.SECONDS.between(start, end) % 60;
+        output(file,"Time Taken - " + hours + " hours " + minutes+ " minutes " + seconds + " seconds.");
 	}
 }

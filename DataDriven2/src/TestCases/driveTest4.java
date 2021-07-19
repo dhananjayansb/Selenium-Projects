@@ -1,14 +1,23 @@
 package TestCases;
 
-import java.time.Duration;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.*;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
-
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -22,6 +31,21 @@ public class driveTest4
 {
 	static WebDriver driver;
 	static JavascriptExecutor js = (JavascriptExecutor) driver;
+	
+	public static void report(String fileName,String extension) throws IOException
+	{
+		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+		String timestamp = new SimpleDateFormat("dd-MMM-yy  hh.mm aa").format(new Date());
+		FileUtils.copyFile(scrFile, new File("./ScreenShot/userReport/" + fileName + " "+ timestamp+extension));
+	}
+	
+	public static void output(File file,String message) throws IOException
+	{
+		FileWriter output = new FileWriter(file,true);
+		BufferedWriter buffer = new BufferedWriter(output);
+		buffer.write(message+"\n");
+		buffer.close();
+	}
 	
 	public static void pleasewait()
 	{
@@ -48,6 +72,10 @@ public class driveTest4
 	
 	public static void main(String[] args) throws Exception
 	{
+		Instant start = Instant.now();
+		String filePath = "D:\\git\\Selenium-Projects\\DataDriven2\\logs\\User Report";
+		String fileName = "result.txt";
+		File file = new File(filePath+"\\"+fileName);
 		
 		System.setProperty("webdriver.chrome.driver","D:\\software\\Selenium\\Drivers\\chromedriver.exe");
 		driver = new ChromeDriver();
@@ -64,12 +92,16 @@ public class driveTest4
 
 		//Administrator-button
 		driver.findElement(By.partialLinkText("Administrat")).click();
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[@id='TABS_AREA']")));	
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[@id='TABS_AREA']")));
+		output(file,"Adminstrator logged");
+		report("Adminstrator logged",".png");
 		
-		//Delegation-button
+		//Report-button
 		WebElement topMenu = driver.findElement(By.id("top-menu"));
 		action.moveToElement(topMenu).moveToElement(driver.findElement(By.xpath("//a[contains(text(),'Reports')]"))).click().build().perform();
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("span[data-original-title='View all the users']")));
+		output(file,"Report logged");
+		report("Report logged",".png");
 		
 		//AllUser Report
 		action.moveToElement(driver.findElement(By.cssSelector("span[data-original-title='View all the users']"))).click().build().perform();
@@ -84,10 +116,14 @@ public class driveTest4
 		{
 			driver.switchTo().window(window);
 		}
+		driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
 		pleasewait();
 		WebElement update = driver.findElement(By.cssSelector("#updateButton"));
 		WebElement preview = driver.findElement(By.cssSelector("#previewButton"));
 		WebElement Description = driver.findElement(By.xpath("(//span[text()='Description']/following::input)[1]"));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("(//span[text()='Description']/following::input)[1]")));
+		output(file,"Swtiched to all user report");
+		report("Switched to all user report",".png");
 		Description.clear();
 		Description.sendKeys("TESTER");
 		preview.sendKeys(Keys.PAGE_DOWN);
@@ -110,7 +146,13 @@ public class driveTest4
 		}
 		WebElement status = driver.findElement(By.cssSelector("#statusTable"));
 		String result = status.getText();
-		System.out.println(result);
+		output(file,result);
+		report("result message",".png");
 		driver.switchTo().window(parentWindow);
+		Instant end = Instant.now();
+		long hours = ChronoUnit.HOURS.between(start, end);
+        long minutes = ChronoUnit.MINUTES.between(start, end) % 60;
+        long seconds = ChronoUnit.SECONDS.between(start, end) % 60;
+        output(file,"Time Taken - " + hours + " hours " + minutes+ " minutes " + seconds + " seconds.");
 	}
 }
